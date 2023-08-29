@@ -1,0 +1,16 @@
+CREADOR MYSQL:
+docker run -d -p 3306:3306 --name mi-contenedor-mysql -e MYSQL_ROOT_PASSWORD=root1 -v ${PWD}/db:/var/lib/mysql mysql:debian
+
+CREADOR WEB1:
+docker build -t web1-container .
+docker run -d --name web1-container -p 8081:80 web1-container
+docker cp /app.js web1-container:/usr/src/app/index.html
+
+CREADOR WEB2:
+docker build -t web2-container .
+docker run -d --name web2-container -p 8082:80 web2-container
+docker cp /app.js web2-container:/usr/src/app/index.html
+
+CREADOR HAPROXY:
+docker run -d --name haproxy-container -p 8085:80 haproxy:latest
+docker cp ${PWD}/haproxy-config/haproxy.cfg haproxy-container:/usr/local/etc/haproxy/haproxy.cfg
